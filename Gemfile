@@ -5,3 +5,5 @@ ruby "2.4.0"
 gem "faye-websocket"
 gem "sinatra"
 gem "puma"
+
+gem "rspec"
