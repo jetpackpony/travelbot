@@ -6,4 +6,8 @@ gem "faye-websocket"
 gem "sinatra"
 gem "puma"
 
-gem "rspec"
+group :test, :development do
+  gem "rspec"
+  gem "ZenTest"
+  gem "rspec-autotest"
+end
