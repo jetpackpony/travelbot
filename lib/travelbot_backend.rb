@@ -1,4 +1,5 @@
 require 'faye/websocket'
+require './lib/chat'
 
 module TravelBot
   class Backend
@@ -6,6 +7,7 @@ module TravelBot
 
     def initialize(app)
       @app = app
+      @clients = {}
     end
 
     def call(env)
@@ -14,22 +16,19 @@ module TravelBot
 
         ws.on :open do |event|
           p [:open, ws.object_id]
+          @clients[ws.object_id] = Chat.new do |msg|
+            ws.send msg
+          end
         end
 
         ws.on :message do |event|
           p [:message, event.data]
-          data = event.data
-          msg = case
-          when data.match('how are you')
-            'i am great! You?'
-          else
-            'hey there, beautiful'
-          end
-          ws.send(msg)
+          @clients[ws.object_id].push_message event.data
         end
 
         ws.on :close do |event|
           p [:close, event.code, event.reason]
+          @clients.delete(ws.object_id)
           ws = nil
         end
 
