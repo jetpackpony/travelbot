@@ -1,6 +1,6 @@
 require './app'
-require './lib/travelbot_backend'
+require './lib/middleware'
 
-use TravelBot::Backend
+use TravelBot::WebSocketCatcher
 
 run TravelBot::App
