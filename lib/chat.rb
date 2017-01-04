@@ -2,6 +2,7 @@ require 'json'
 
 module TravelBot
   class Chat
+    WAIT_MESSAGE = { type: :none, label: "Hold on I'll fetch you flight info" }
     def initialize(scenario, &send_action)
       @send_action = send_action
       @scenario = scenario
@@ -12,29 +13,26 @@ module TravelBot
     end
 
     def push_message(msg)
-      return if @scenario.complete?
-      @scenario.current[:value] =
-        case @scenario.current[:type]
-        when :text
-          search_location msg
-        when :select
-          parse_option msg
-        when :date
-          parse_date msg
-        end
-      @scenario.next
+      @scenario.set_value = parse_value(@scenario, msg)
       respond JSON.generate(
-        if @scenario.complete?
-          { type: :none, label: "Hold on I'll fetch you flight info" }
-        else
-          @scenario.current
-        end
+        @scenario.complete? ? WAIT_MESSAGE : @scenario.current
       )
     end
 
     private
     def respond(msg)
       @send_action.call msg
+    end
+
+    def parse_value(scenario, msg)
+      case scenario.current[:type]
+      when :text
+        search_location msg
+      when :select
+        parse_option msg
+      when :date
+        parse_date msg
+      end
     end
 
     def search_location(msg)

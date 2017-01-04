@@ -42,6 +42,11 @@ module TravelBot
       @questions[@position]
     end
 
+    def set_value=(value)
+      current[:value] = value
+      self.next
+    end
+
     def next
       @position += 1
       return current if complete?
