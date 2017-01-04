@@ -2,7 +2,7 @@ var scheme   = "ws://";
 var uri      = scheme + window.document.location.host + "/";
 var ws       = new WebSocket(uri);
 ws.onmessage = function(message) {
-  $("#chat-body").append(message.data + "<br>");
+  $("#chat-body").append(JSON.parse(message.data).label + "<br>");
 };
 
 $("#input-form").on("submit", function(event) {
