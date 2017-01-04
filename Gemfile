@@ -10,4 +10,5 @@ group :test, :development do
   gem "rspec"
   gem "ZenTest"
   gem "rspec-autotest"
+  gem "byebug"
 end
