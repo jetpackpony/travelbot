@@ -7,6 +7,7 @@ require "./lib/skyscanner_api/skyscanner_api"
 module TravelBot
   class Chat
     WAIT_MESSAGE = { type: :none, label: "Hold on I'll fetch you flight info" }
+
     def initialize(scenario, &send_action)
       @send_action = send_action
       @scenario = scenario
@@ -18,11 +19,12 @@ module TravelBot
 
     def push_message(msg)
       @scenario.set_value = parse_value(@scenario, msg)
-      respond JSON.generate(
-        @scenario.complete? ? WAIT_MESSAGE : @scenario.current
-      )
       if @scenario.complete?
-        flights = get_flights(*@scenario.data)
+        respond JSON.generate(WAIT_MESSAGE)
+        flights = get_flights(*@scenario.request)
+        respond JSON.generate(flights)
+      else
+        respond JSON.generate(@scenario.current)
       end
     end
 
@@ -85,7 +87,7 @@ module TravelBot
       request.destination = to[:id]
       request.departureDate = date.strftime("%Y-%m-%d")
       request.adultsNumber = 1
-      request.locationschema = "Sky"
+      request.locationSchema = "Sky"
 
       promise = request.send_request
       value =
