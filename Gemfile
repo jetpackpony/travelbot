@@ -6,6 +6,7 @@ gem "faye-websocket"
 gem "sinatra"
 gem "puma"
 gem "promise.rb"
+gem "dotenv"
 
 group :test, :development do
   gem "rspec"
