@@ -1,10 +1,9 @@
 module SkyScannerAPI
   module Request
     API_HOST = "partners.api.skyscanner.net"
-    AUTOCOMPLETE_PATH = "/apiservices/autosuggest"
     VERSION = "v1.0"
 
-    attr_accessor :market, :currency, :locale, :apiKey
+    attr_accessor :market, :currency, :locale, :apiKey, :country
 
     def initialize(options = {})
       @uri = nil

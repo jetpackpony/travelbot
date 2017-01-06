@@ -1,5 +1,6 @@
 module SkyScannerAPI
   class LocationAutocompleteRequest
+    AUTOCOMPLETE_PATH = "/apiservices/autosuggest"
     include Request
 
     attr_accessor :query
