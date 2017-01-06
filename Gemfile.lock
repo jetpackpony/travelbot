@@ -8,6 +8,7 @@ GEM
     faye-websocket (0.10.5)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
+    promise.rb (0.7.2)
     puma (3.6.2)
     rack (1.6.5)
     rack-protection (1.5.3)
@@ -43,6 +44,7 @@ DEPENDENCIES
   ZenTest
   byebug
   faye-websocket
+  promise.rb
   puma
   rspec
   rspec-autotest
