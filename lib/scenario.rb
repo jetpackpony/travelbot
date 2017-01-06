@@ -3,34 +3,34 @@ module TravelBot
     def initialize
       @questions = [
         {
-          name: 'to-location-text',
+          name: "to-location-text",
           type: :text,
-          label: 'Where are you flying to?',
-          value: ''
+          label: "Where are you flying to?",
+          value: ""
         },
         {
-          name: 'to-location-select',
+          name: "to-location-select",
           type: :select,
-          label: 'Which city?',
+          label: "Which city?",
           options: [],
           value: nil
         },
         {
-          id: 'departure-date',
+          id: "departure-date",
           type: :date,
           question: "When would you like to go?",
           value: nil
         },
         {
-          name: 'from-location-text',
+          name: "from-location-text",
           type: :text,
-          label: 'Where are you flying from?',
-          value: ''
+          label: "Where are you flying from?",
+          value: ""
         },
         {
-          name: 'from-location-select',
+          name: "from-location-select",
           type: :select,
-          label: 'Which city?',
+          label: "Which city?",
           options: [],
           value: nil
         },
@@ -65,15 +65,19 @@ module TravelBot
     end
 
     def from
-      @questions.find { |i| i[:id] === 'from-location' }[:value]
+      @questions.find { |i| i[:id] === "from-location-select" }[:value]
     end
 
     def to
-      @questions.find { |i| i[:id] === 'to-location' }[:value]
+      @questions.find { |i| i[:id] === "to-location-select" }[:value]
     end
 
     def date
-      @questions.find { |i| i[:id] === 'date' }[:value]
+      @questions.find { |i| i[:id] === "departure-date" }[:value]
+    end
+
+    def request
+      [from, to, date]
     end
   end
 end

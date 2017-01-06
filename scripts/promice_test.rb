@@ -1,13 +1,10 @@
-require 'concurrent'
+require "promise"
 
-p =
-  Concurrent::Promise.new { 10 }
-  .then { |res| res + 10 }
-  .then { |res| raise 'error' }
+p = Promise.new.tap do |promise|
+    sleep(3)
+    promise.fulfill(10)
+  end
+p.then { |res| res + 10 }
   .then { |res| puts res }
   .rescue { |reason| puts reason }
-  .execute
 
-while !p.complete?
-  sleep 0.1
-end

@@ -29,6 +29,7 @@ RSpec.describe TravelBot::Chat do
     before(:each) do
       @scenario = double
       @current_step = double
+      allow(@scenario).to receive(:data) { [1, 2, 3] }
       allow(@scenario).to receive(:set_value=)
       allow(@scenario).to receive(:complete?) { false }
       allow(@scenario).to receive(:current) { @current_step }
@@ -56,6 +57,7 @@ RSpec.describe TravelBot::Chat do
 
     it "responds with the wait message if the scenario is complete" do
       allow(@scenario).to receive(:complete?) { true }
+      allow(@chat).to receive(:get_flights)
       allow(@chat).to receive(:respond) do |msg|
         expect(msg).to eq(JSON.generate(TravelBot::Chat::WAIT_MESSAGE))
       end
