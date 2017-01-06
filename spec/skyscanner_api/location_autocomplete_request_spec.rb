@@ -1,4 +1,4 @@
-require './lib/skyscanner_api'
+require './lib/skyscanner_api/skyscanner_api'
 
 RSpec.describe SkyScannerAPI::LocationAutocompleteRequest do
   describe "#send_request" do

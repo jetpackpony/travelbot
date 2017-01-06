@@ -1,8 +1,8 @@
 require "json"
-require_relative "./skyscanner_api"
 require "pry"
 require "dotenv"
 Dotenv.load
+require "./lib/skyscanner_api/skyscanner_api"
 
 module TravelBot
   class Chat
