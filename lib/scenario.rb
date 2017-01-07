@@ -15,9 +15,9 @@ module TravelBot
         value: nil
       },
       {
-        id: "departure-date",
+        name: "departure-date",
         type: :date,
-        question: "When would you like to go?",
+        label: "When would you like to go?",
         value: nil
       },
       {
