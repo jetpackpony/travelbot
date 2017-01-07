@@ -7,6 +7,7 @@ require "./lib/skyscanner_api/skyscanner_api"
 module TravelBot
   class Chat
     WAIT_MESSAGE = { type: :none, label: "Hold on I'll fetch you flight info" }
+    NUMBER_OF_OPTIONS_TO_DISPLAY = 5
 
     def initialize(scenario, &send_action)
       @send_action = send_action
@@ -22,7 +23,8 @@ module TravelBot
       if @scenario.complete?
         respond JSON.generate(WAIT_MESSAGE)
         flights = get_flights(*@scenario.request)
-        respond JSON.generate(flights)
+        decorated = decorate_results(flights)
+        respond JSON.generate({ type: :none, label: decorated })
       else
         respond JSON.generate(@scenario.current)
       end
@@ -98,6 +100,41 @@ module TravelBot
         end
 
       JSON.parse(value.body)
+    end
+
+    def decorate_results(flights)
+      query = flights["Query"]
+      from = flights["Places"].find do |p|
+        p["Id"] == query["OriginPlace"].to_i
+      end
+      to = flights["Places"].find do |p|
+        p["Id"] == query["DestinationPlace"].to_i
+      end
+      date = query["OutboundDate"]
+
+      itineraries = flights["Itineraries"]
+        .slice(0, NUMBER_OF_OPTIONS_TO_DISPLAY)
+        .map do |iti|
+          res = {
+            price: iti["PricingOptions"][0]["Price"],
+            deeplink: iti["PricingOptions"][0]["DeeplinkUrl"],
+          }
+
+          leg = flights["Legs"].find { |leg| leg["Id"] == iti["OutboundLegId"] }
+          res[:departure] = leg["Departure"]
+          res[:arrival] = leg["Arrival"]
+          res[:duration] = leg["Duration"]
+
+          res[:stops] = leg["Stops"].map do |stop|
+            flights["Places"].find { |p| p["Id"] == stop }
+          end
+          res[:carriers] = leg["OperatingCarriers"].map do |carrier|
+            flights["Carriers"].find { |c| c["Id"] == carrier }
+          end
+          res
+        end
+
+      { from: from, to: to, date: date, itineraries: itineraries }
     end
   end
 end
