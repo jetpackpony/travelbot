@@ -1,6 +1,6 @@
 require './lib/chat'
 require './lib/scenario'
-require 'byebug'
+require 'pry'
 
 scenario = TravelBot::Scenario.new
 chat = TravelBot::Chat.new(scenario) do |msg|
@@ -10,8 +10,8 @@ chat = TravelBot::Chat.new(scenario) do |msg|
     m["options"].each { |o| puts o }
   end
 end
-chat.start
 
-loop do
-  chat.push_message gets.chomp
-end
+parsed = JSON.parse File.read('dump.json')
+res = chat.decorate_results parsed
+
+binding.pry
