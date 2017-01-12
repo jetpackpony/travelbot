@@ -11,15 +11,19 @@ class Chat extends Component {
     this.handleMessage = this.handleMessage.bind(this);
   }
 
+  pushMessage(msg) {
+    this.setState({ messages: [...this.state.messages, msg] });
+  }
+
   componentDidMount() {
     this.socket  = new WebSocket(WS_ADDRESS);
     this.socket.onmessage = ({ data }) => {
-      this.setState({ messages: [data, ...this.state.messages] });
+      this.pushMessage(data);
     };
   }
 
   handleMessage(msg) {
-    this.setState({ messages: [msg, ...this.state.messages] });
+    this.pushMessage(msg);
     this.socket.send(msg);
   }
 
