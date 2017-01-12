@@ -19,7 +19,7 @@ class Chat extends Component {
   componentDidMount() {
     this.socket  = new WebSocket(WS_ADDRESS);
     this.socket.onmessage = ({ data }) => {
-      this.pushMessage(data);
+      this.pushMessage(JSON.parse(data));
     };
   }
 
