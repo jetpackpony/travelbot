@@ -37,6 +37,7 @@ RSpec.describe TravelBot::Chat do
       allow(@chat).to receive(:parse_value) { 'testme' }
       allow(@chat).to receive(:respond) { 'testme' }
       allow(@chat).to receive(:get_flights) { "flight_list" }
+      allow(@chat).to receive(:decorate_results) { "decorated_results" }
     end
 
     it "sets the value of the current step of the scenario" do
