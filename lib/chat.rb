@@ -1,5 +1,4 @@
 require "json"
-require "pry"
 require "dotenv"
 Dotenv.load
 require "./lib/skyscanner_api/skyscanner_api"
