@@ -8,8 +8,7 @@ module TravelBot
 
     attr_reader :clients
 
-    def initialize(app)
-      @app = app
+    def initialize
       @clients = {}
     end
 
@@ -17,7 +16,12 @@ module TravelBot
       if Faye::WebSocket.websocket?(env)
         process_websocket(env)
       else
-        @app.call(env)
+        content = 'Not Found'
+        [
+          404,
+          {'Content-Type' => 'text/html', 'Content-Length' => content.size.to_s},
+          [content]
+        ]
       end
     end
 
