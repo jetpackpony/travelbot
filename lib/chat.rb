@@ -84,6 +84,7 @@ module TravelBot
     end
 
     def get_flights(from, to, date)
+      @logger.info "Searching for flights: #{from} to #{to} on #{date}"
       request = SkyScannerAPI::FlightsLivePricingRequest.new
       request.country = "US"
       request.currency = "USD"
@@ -94,6 +95,7 @@ module TravelBot
       request.departureDate = date.strftime("%Y-%m-%d")
       request.adultsNumber = 1
       request.locationSchema = "Sky"
+      @logger.info "Sending request: #{request.inspect}"
 
       promise = request.send_request
       value =
