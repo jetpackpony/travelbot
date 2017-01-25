@@ -23,7 +23,11 @@ module TravelBot
         respond JSON.generate(WAIT_MESSAGE)
         flights = get_flights(*@scenario.request)
         decorated = decorate_results(flights)
-        respond JSON.generate({ type: :none, label: decorated })
+        respond JSON.generate({
+          type: :results,
+          label: @scenario.results_label,
+          flights: decorated
+        })
       else
         respond JSON.generate(@scenario.current)
       end

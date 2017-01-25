@@ -85,5 +85,9 @@ module TravelBot
     def request
       complete? ? [from, to, date] : false
     end
+
+    def results_label
+      "Here are the cheapest flights from #{from} to #{to} for #{date}"
+    end
   end
 end

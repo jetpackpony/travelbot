@@ -30,6 +30,7 @@ RSpec.describe TravelBot::Chat do
       @scenario = instance_double("TravelBot::Scenario")
       @current_step = double
       allow(@scenario).to receive(:request) { [1, 2, 3] }
+      allow(@scenario).to receive(:results_label) { "" }
       allow(@scenario).to receive(:set_value=)
       allow(@scenario).to receive(:complete?) { false }
       allow(@scenario).to receive(:current) { @current_step }
