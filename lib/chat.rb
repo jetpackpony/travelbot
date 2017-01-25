@@ -8,9 +8,10 @@ module TravelBot
     WAIT_MESSAGE = { type: :none, label: "Hold on I'll fetch you flight info" }
     NUMBER_OF_OPTIONS_TO_DISPLAY = 5
 
-    def initialize(scenario, &send_action)
+    def initialize(scenario, logger, &send_action)
       @send_action = send_action
       @scenario = scenario
+      @logger = logger
     end
 
     def start
