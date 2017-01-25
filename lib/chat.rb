@@ -8,9 +8,10 @@ module TravelBot
     WAIT_MESSAGE = { type: :none, label: "Hold on I'll fetch you flight info" }
     NUMBER_OF_OPTIONS_TO_DISPLAY = 5
 
-    def initialize(scenario, &send_action)
+    def initialize(scenario, logger, &send_action)
       @send_action = send_action
       @scenario = scenario
+      @logger = logger
     end
 
     def start
@@ -83,6 +84,7 @@ module TravelBot
     end
 
     def get_flights(from, to, date)
+      @logger.info "Searching for flights: #{from} to #{to} on #{date}"
       request = SkyScannerAPI::FlightsLivePricingRequest.new
       request.country = "US"
       request.currency = "USD"
@@ -93,6 +95,7 @@ module TravelBot
       request.departureDate = date.strftime("%Y-%m-%d")
       request.adultsNumber = 1
       request.locationSchema = "Sky"
+      @logger.info "Sending request: #{request.inspect}"
 
       promise = request.send_request
       value =

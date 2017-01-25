@@ -1,12 +1,18 @@
+require 'logger'
 require './lib/chat'
 include TravelBot
 
 RSpec.describe TravelBot::Chat do
+  before(:each) do
+    @logger = instance_double(Logger)
+    allow(@logger).to receive(:info)
+    @scenario = double()
+    allow(@scenario).to receive(:current) { { question: "first question" } }
+  end
+
   describe "#start" do
     it "calls the block with the first question from scenario" do
-      scenario = double()
-      allow(scenario).to receive(:current) { { question: "first question" } }
-      chat = Chat.new(scenario) do |msg|
+      chat = Chat.new(@scenario, @logger) do |msg|
         expect(msg).to eq JSON.generate({ question: "first question" })
       end
 
@@ -16,8 +22,7 @@ RSpec.describe TravelBot::Chat do
 
   describe "#respond" do
     it "calls the block passed on object creation with message" do
-      scenario = double()
-      chat = Chat.new(scenario) do |msg|
+      chat = Chat.new(@scenario, @logger) do |msg|
         expect(msg).to eq "test message"
       end
       # This is a private method, so
@@ -27,6 +32,8 @@ RSpec.describe TravelBot::Chat do
 
   describe "#push_message" do
     before(:each) do
+      @logger = instance_double(Logger)
+      allow(@logger).to receive(:info)
       @scenario = instance_double("TravelBot::Scenario")
       @current_step = double
       allow(@scenario).to receive(:request) { [1, 2, 3] }
@@ -34,7 +41,7 @@ RSpec.describe TravelBot::Chat do
       allow(@scenario).to receive(:set_value=)
       allow(@scenario).to receive(:complete?) { false }
       allow(@scenario).to receive(:current) { @current_step }
-      @chat = Chat.new(@scenario) {}
+      @chat = Chat.new(@scenario, @logger) {}
       allow(@chat).to receive(:parse_value) { 'testme' }
       allow(@chat).to receive(:respond) { 'testme' }
       allow(@chat).to receive(:get_flights) { "flight_list" }

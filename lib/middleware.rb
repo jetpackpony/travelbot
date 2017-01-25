@@ -1,4 +1,5 @@
 require 'faye/websocket'
+require 'logger'
 require './lib/chat'
 require './lib/scenario'
 
@@ -27,25 +28,27 @@ module TravelBot
 
     def process_websocket(env)
       ws = Faye::WebSocket.new(env, nil, {ping: KEEPALIVE_TIME })
+      logger = Logger.new(STDOUT)
 
       ws.on :open do |event|
-        p on_socket_open(ws, event)
+        logger.info(on_socket_open(ws, event, logger))
       end
 
       ws.on :message do |event|
-        p on_socket_message(ws, event)
+        logger.info(on_socket_message(ws, event))
       end
 
       ws.on :close do |event|
-        p on_socket_close(ws, event)
+        logger.info(on_socket_close(ws, event))
         ws = nil
       end
       # Return async Rack response
       ws.rack_response
     end
 
-    def on_socket_open(ws, event)
-      chat = Chat.new(TravelBot::Scenario.new) do |msg|
+    def on_socket_open(ws, event, logger)
+      chat = Chat.new(TravelBot::Scenario.new, logger) do |msg|
+        logger.info([:responding, msg])
         ws.send msg
       end
       chat.start

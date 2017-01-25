@@ -29,11 +29,13 @@ RSpec.describe TravelBot::WebSocketCatcher do
       allow(@event).to receive(:data) { "testme" }
       allow(@event).to receive(:code) { "testme" }
       allow(@event).to receive(:reason) { "testme" }
+      @logger = instance_double(Logger)
+      allow(@logger).to receive(:info)
     end
 
     it "creates a new chat client on open" do
       catcher = TravelBot::WebSocketCatcher.new
-      catcher.on_socket_open(@socket, @event)
+      catcher.on_socket_open(@socket, @event, @logger)
       expect(catcher.clients.length).to eq(1)
     end
 
@@ -43,7 +45,7 @@ RSpec.describe TravelBot::WebSocketCatcher do
       allow(TravelBot::Chat).to receive(:new) { chat }
 
       catcher = TravelBot::WebSocketCatcher.new
-      catcher.on_socket_open(@socket, @event)
+      catcher.on_socket_open(@socket, @event, @logger)
     end
 
     it "pushes a message to a chat on message" do
@@ -56,13 +58,13 @@ RSpec.describe TravelBot::WebSocketCatcher do
       allow(TravelBot::Chat).to receive(:new) { chat }
 
       catcher = TravelBot::WebSocketCatcher.new
-      catcher.on_socket_open(@socket, @event)
+      catcher.on_socket_open(@socket, @event, @logger)
       catcher.on_socket_message(@socket, @event)
     end
 
     it "removes client on close" do
       catcher = TravelBot::WebSocketCatcher.new
-      catcher.on_socket_open(@socket, @event)
+      catcher.on_socket_open(@socket, @event, @logger)
       catcher.on_socket_close(@socket, @event)
       expect(catcher.clients.length).to eq(0)
     end
