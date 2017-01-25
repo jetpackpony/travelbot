@@ -87,7 +87,7 @@ module TravelBot
     end
 
     def results_label
-      "Here are the cheapest flights from #{from} to #{to} for #{date}"
+      "Here are the cheapest flights from #{from[:name]} to #{to[:name]} for #{date}"
     end
   end
 end

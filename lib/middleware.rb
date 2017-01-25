@@ -31,16 +31,28 @@ module TravelBot
       logger = Logger.new(STDOUT)
 
       ws.on :open do |event|
-        logger.info(on_socket_open(ws, event, logger))
+        begin
+          logger.info(on_socket_open(ws, event, logger))
+        rescue Exception => e
+          logger.fatal e.message
+        end
       end
 
       ws.on :message do |event|
-        logger.info(on_socket_message(ws, event))
+        begin
+          logger.info(on_socket_message(ws, event))
+        rescue Exception => e
+          logger.fatal e.message
+        end
       end
 
       ws.on :close do |event|
-        logger.info(on_socket_close(ws, event))
-        ws = nil
+        begin
+          logger.info(on_socket_close(ws, event))
+          ws = nil
+        rescue Exception => e
+          logger.fatal e.message
+        end
       end
       # Return async Rack response
       ws.rack_response
