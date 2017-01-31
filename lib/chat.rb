@@ -63,7 +63,7 @@ module TravelBot
         begin
           promise.sync
         rescue
-          raise "Couldn't query the country: #{promise.reason}"
+          raise "Couldn't query the country: #{promise.reason.body}"
         end
 
       JSON.parse(value.body)["Places"].map do |p|
@@ -102,7 +102,7 @@ module TravelBot
         begin
           promise.sync
         rescue
-          raise "Couldn't query flights: #{[from, to, date].join(", ")}. #{promise.reason}"
+          raise "Couldn't query flights: #{[from, to, date].join(", ")}. #{promise.reason.body}"
         end
 
       JSON.parse(value.body)
