@@ -6,6 +6,7 @@ require "./lib/skyscanner_api/skyscanner_api"
 module TravelBot
   class Chat
     WAIT_MESSAGE = { type: :none, label: "Hold on I'll fetch you flight info" }
+    FATAL_MESSAGE = { type: :none, label: "Oops, there was a problem with searching for your flight. A well trained group of ponies was notified of this and they are rushing to the rescue!" }
     NUMBER_OF_OPTIONS_TO_DISPLAY = 5
 
     def initialize(scenario, logger, &send_action)
@@ -22,13 +23,18 @@ module TravelBot
       @scenario.set_value = parse_value(@scenario, msg)
       if @scenario.complete?
         respond JSON.generate(WAIT_MESSAGE)
-        flights = get_flights(*@scenario.request)
-        decorated = decorate_results(flights)
-        respond JSON.generate({
-          type: :results,
-          label: @scenario.results_label,
-          flights: decorated
-        })
+        begin
+          flights = get_flights(*@scenario.request)
+          decorated = decorate_results(flights)
+          respond JSON.generate({
+            type: :results,
+            label: @scenario.results_label,
+            flights: decorated
+          })
+        rescue Exception => e
+          @logger.fatal e.message
+          respond JSON.generate FATAL_MESSAGE
+        end
       else
         respond JSON.generate(@scenario.current)
       end
