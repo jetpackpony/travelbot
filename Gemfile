@@ -13,4 +13,5 @@ group :test, :development do
   gem "rspec-autotest"
   gem "byebug"
   gem "pry"
+  gem 'pry-byebug'
 end

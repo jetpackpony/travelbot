@@ -16,6 +16,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.4.2)
+      byebug (~> 9.0)
+      pry (~> 0.10)
     puma (3.6.2)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
@@ -47,6 +50,7 @@ DEPENDENCIES
   faye-websocket
   promise.rb
   pry
+  pry-byebug
   puma
   rspec
   rspec-autotest
